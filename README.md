@@ -1,5 +1,9 @@
 # Advanced Lane Lines Finding
 
+<p align="center">
+<img src = "./demo_gif/Video_GIF.gif" width = "650" height = "400"> 
+</p>
+
 ## Approach
 
 ### Camera Calibration
