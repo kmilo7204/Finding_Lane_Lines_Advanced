@@ -4,6 +4,11 @@
 <img src = "./demo_gif/Video_GIF.gif" width = "650" height = "400"> 
 </p>
 
+## Tools
+The tools used to find the lane lines in the images and the videos were:
+ - Python
+ - OpenCV
+
 ## Approach
 
 ### Camera Calibration
@@ -11,10 +16,12 @@ Every time a camera captures 3D Objects in the real world, it provides a represe
 
 For this project, the camera calibration is performed by using chessboard images (One of the most common methods). The input data needed to calibrate the camera is a set of 3D real world points and the corresponding 2D coordinates of these points in the image.
 
+See cell `3` for code and cell `4` for results.
 
 ### Undistorting Images
 After the camera calibratrion, the camera matrix and the distortion coefficients were obtained. With them I was able to undistort the input images to corret the radial and tangential distorion.
 
+See cell `5` for code and cell `6` for results.
 
 #### Results
 Undistorting the input image.
@@ -39,6 +46,8 @@ Yellow       |    HSV     | (21, 60, 80) to (40, 255, 255)
 
 It is important to highlight that after the application of each color filter and its respective colorspace transformation, the image went through a histogram equalization and then through a binarization to get pixel values of 0 or 1.
 
+See cell `7` for code and cell `8` for results.
+
 #### Results
 * Image thresholding (Color filters).
 
@@ -53,6 +62,8 @@ RGB White | HSV White | HLS Yellow | HSV Yellow
 
 ### Bird's Eye View
 The next step of this approach is the Bird's eye transformation of the Binary Image. In this section the image is warped so we can see a section of our interest (ROI) of the original image from above. The main reason to perform this transformation is that having an image seen from above will allow the algorithm to fit a curve on the lane pixels as they are projected on a 2D plane.
+
+See cell `9` for code and cell `10` for results.
 
 #### Results
 Bird's eye transformation.
@@ -76,9 +87,13 @@ This part of the section is really important. The sliding window method starts f
 
 After the first pair of windows are created at the bottom of the image, six additional windows are stacked vertically in the lines shape (from the bottom to the top) and its center is determined by the mean of the pixel coordinates if the amount of pixels within that window is greater than 50.
 
+See cell `11` for code and cell `12` for results.
+
 #### 2nd Degree polynomial fit
 
 To fit a 2nd degree polynomial that represents the left and right lines, the algorithm uses the pixel coordinates (in X and Y) obtained from the sliding window method to calculate it. 
+
+See cell `13` for code and cell `14` for results.
 
 #### Results
 Finding lane lines
