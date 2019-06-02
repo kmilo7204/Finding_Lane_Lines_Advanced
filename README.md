@@ -105,9 +105,9 @@ Histogram | Sliding window | Polynomial fit
 ### Vehicle position and Road curvature
 Finally, the last step of this approach was the calculation of the road curvature and the vehicle position within the lane.
 
-To calculate the road curvature, the algorithm fitted a polynomial to the world space followed by the curvature calculation. To do so, a couple of scale measurementes were used(For X and Y axis). For this project the mean curvature of the left and right curves is shown.
+To calculate the road curvature, the algorithm fitted a polynomial to the world space followed by the curvature calculation. To do so, a couple of scale measurementes were used (for X and Y axis). For this project the mean curvature of the left and right curves is shown.
 
-The calculation of the vehicle position was made by using the two detected lane lines and with the assumption that the camera was located in the centre of the image. Similar to the curvature calculation, a scale measurement in the X axis was apply to convert the piexels into distance units (Meters).
+The calculation of the vehicle position was made by using the two detected lane lines and with the assumption that the camera was located in the centre of the image. Similar to the curvature calculation, a scale measurement in the X axis was apply to convert the pixels into distance units (meters).
 
 ### Final Result
 Next the final result of my project is shown. In the final frame the binary image and the polynomial fit are incuded to see how the algorithm identifies the lines and fits a 2nd degree polynomial. Additional information such as the road curvature and the vehicle position are included as well.
