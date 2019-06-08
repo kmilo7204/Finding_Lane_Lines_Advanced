@@ -1,4 +1,17 @@
 # Advanced Lane Lines Finding
+Similar to the solution explained in the [Finding Line Lanes](https://github.com/kmilo7204/Finding_Lane_Lines/blob/master/README.md) repository. The aim of this project is to find the lane boundaries not only in straight line but also in curves by applying computer vision techniques to the images captured with a camera mounted at the fron of the vehicle.
+
+This repository explains the approach implemented for the project number 4 of the Udacity Self-Driving Car Engineer Nanodegree. 
+
+To find the lane boundaries in this proejct, it was divided into the next stages:
+
+1. Camera calibration to find the camera intrinsic parameters. See cell `3`
+2. Image undistorting based on the camera parameters. See cell `5`
+3. Image pre-processing to extract the lines in a binary image. See cell `7`
+4. Bird's eye transformation to see a ROI in the road from above. See cell `9`
+5. Lane detection from Bird's eye transformation. See cells `11` and `13`
+6. Road curvature and vehicle offset calculation. See cell `15`
+7. Function for video processing. See cells `17`and `19`
 
 <p align="center">
 <img src = "./demo_gif/Video_GIF.gif" width = "650" height = "400"> 
@@ -12,14 +25,14 @@ The tools used to find the lane lines in the images and the videos were:
 ## Approach
 
 ### Camera Calibration
-Every time a camera captures 3D Objects in the real world, it provides a representation of it in 2D images; however, this tranformation is not exact as it modifies the sizes and shapes due to the use of curved lenses. To remove the distortion in the images a camera calibration is required, in order to find the intrinsic parameters and then correct the original images.
+Every time a camera captures 3D Objects in the real world, it provides a representation of it in 2D images; however, this tranformation is not exact as it modifies the sizes and shapes due to the use of curved lenses. Thus, to remove the distortion in the images a camera calibration is required, in order to find the intrinsic parameters and then correct the original images.
 
-For this project, the camera calibration is performed by using chessboard images (One of the most common methods). The input data needed to calibrate the camera is a set of 3D real world points and the corresponding 2D coordinates of these points in the image.
+For this project, the camera calibration was performed by using chessboard images (One of the most common methods). The input data needed to calibrate the camera, was a set of 3D real world points and the corresponding 2D coordinates of these points in the image.
 
 See cell `3` for code and cell `4` for results.
 
 ### Undistorting Images
-After the camera calibratrion, the camera matrix and the distortion coefficients were obtained. With them I was able to undistort the input images to corret the radial and tangential distorion.
+After the camera calibratrion, the camera matrix and the distortion coefficients were obtained. With them I was able to undistort the input images to correct the radial and tangential distortion.
 
 See cell `5` for code and cell `6` for results.
 
@@ -31,9 +44,9 @@ Input Image | Undistorted Image
 <img src = "./test_images_output/Image.jpg" width = "420" height = "230"/> | <img src = "./test_images_output/Udst%20Image.jpg" width = "420" height = "230"/>
 
 ### Image Thresholding
-Once the image distortion is corrected we need to find the lane pixels. To do so, different techniques can be applied to process specific color channels and gradients to extract the pixels of our interest and create binary image that contains the lane pixels.
+Once the image distortion was corrected I needed to find the lane pixels. To do so, different techniques were applied to process specific color channels and gradients to extract the pixels of our interest and create binary image that contains the lane pixels.
 
-There are many different techiques that you can use to find the lane lines; however, in this project a series of color filters were applied in order to isolate the white and yellow elements in the image and therefore make the lanes clearly visible. The color filters were selected as the main method to extract the pixels of our interest, because they provided the best results in the identification of both color pixels along the images.
+As explained above, many different techniques could be used to find the lane lines; nevertheless, in this project a series of color filters were applied in order to isolate the white and yellow elements in the image and therefore make the lanes clearly visible. The color filters were selected as the main method to extract the pixels of our interest, because they provided the best results in the identification of both color pixels along the images.
 
 A list of the color filters, its respective colorspace and the range used in this project to perform the image thresholding is shown next:
 
@@ -61,7 +74,7 @@ RGB White | HSV White | HLS Yellow | HSV Yellow
 </p>
 
 ### Bird's Eye View
-The next step of this approach is the Bird's eye transformation of the Binary Image. In this section the image is warped so we can see a section of our interest (ROI) of the original image from above. The main reason to perform this transformation is that having an image seen from above will allow the algorithm to fit a curve on the lane pixels as they are projected on a 2D plane.
+The next step of this approach was the Bird's eye transformation of the Binary Image. In this section the image is warped so we can see a section of our interest (ROI) of the original image from above. The main reason to perform this transformation is that having an image seen from above will allow the algorithm to fit a curve on the lane pixels as they are projected on a 2D plane.
 
 See cell `9` for code and cell `10` for results.
 
@@ -80,18 +93,18 @@ With the Bird's Eye view image and the lane pixels proyected on a 2D plane, the 
 3.   Fit a 2nd degree polynomial to the detected lane pixels.
 
 #### Histogram
-In order to get a reference and indentify the pixels belonging to the lane lines, I applied a function to find the and calculate the histogram of the image along the X axis (Columns). As the pixels in the binary image are either 0 or 1, the histogram will add the pixels in each column, once the method performs the sum of pixels in the whole frame, two peaks corresponding to the left and right lines are found.
+In order to get a reference and indentify the pixels belonging to the lane lines, I applied a function to find the and calculate the histogram of the image along the X axis (Columns). As the pixels in the binary image were either 0 or 1, the histogram added the pixels in each column, once the method performed the sum of pixels in the whole frame, two peaks corresponding to the left and right lines were found.
 
 #### Sliding window method
 This part of the section is really important. The sliding window method starts from the centre of the peaks obtained from the histogram (in the X axis or columns), at those two points a pair of windows are created with a width of 200 pixels (100 to the left and 100 to the right) and a height of 103 pixels. 
 
-After the first pair of windows are created at the bottom of the image, six additional windows are stacked vertically in the lines shape (from the bottom to the top) and its center is determined by the mean of the pixel coordinates if the amount of pixels within that window is greater than 50.
+After the first pair of windows were created at the bottom of the image, six additional windows weree stacked vertically in the lines shape (from the bottom to the top) and its center was determined by the mean of the pixel coordinates if the amount of pixels within that window was greater than 50.
 
 See cell `11` for code and cell `12` for results.
 
 #### 2nd Degree polynomial fit
 
-To fit a 2nd degree polynomial that represents the left and right lines, the algorithm uses the pixel coordinates (in X and Y) obtained from the sliding window method to calculate it. 
+To fit a 2nd degree polynomial that represents the left and right lines, the algorithm used the pixel coordinates (in X and Y) obtained from the sliding window method to calculate it. 
 
 See cell `13` for code and cell `14` for results.
 
@@ -110,10 +123,11 @@ To calculate the road curvature, the algorithm fitted a polynomial to the world 
 The calculation of the vehicle position was made by using the two detected lane lines and with the assumption that the camera was located in the centre of the image. Similar to the curvature calculation, a scale measurement in the X axis was apply to convert the pixels into distance units (meters).
 
 ### Final Result
-Next the final result of my project is shown. In the final frame the binary image and the polynomial fit are incuded to see how the algorithm identifies the lines and fits a 2nd degree polynomial. Additional information such as the road curvature and the vehicle position are included as well.
+Next the final result of my project is shown. In the final frame the binary image and the polynomial fit are included to see how the algorithm identifies the lines and fits a 2nd degree polynomial. Additional information such as the road curvature and the vehicle position are included as well.
 
 <p align = "center" />
-
 <img src = "./test_images_output/Final%20Image.jpg" width = "576" height = "320"/>
-
 </p>
+
+## Video
+Find a video with the final results of this project in this [link](https://www.youtube.com/watch?v=96xQacFWK4k).
